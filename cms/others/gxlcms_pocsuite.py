@@ -12,7 +12,7 @@ class TestPOC(POCBase):
     createDate='2016-7-30'
     updateDate='2016-7-30'
     references=['https://www.seebug.org/vuldb/ssvid-92157']
-    name='gxlcms'
+    name='gxlcms' 
     appPowerLink='https://www.gxlcms.com'
     appName='gxlcms'
     appVersion='1.1.4'
